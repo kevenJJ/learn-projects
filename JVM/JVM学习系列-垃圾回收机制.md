@@ -115,6 +115,7 @@ public class FinalizeEscapeGC {
 
 
 ##### 3.2.5 回收方法区
+方法区垃圾回收的”性价比“通常比较低；在Java堆中，尤其是在新生代中，对常规应用
 
 
 
