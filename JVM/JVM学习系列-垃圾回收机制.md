@@ -203,6 +203,34 @@ Java 虚拟机**被允许**对满足上述三个条件的无用类进行回收�
 #### 3.4 HotSpot 的算法细节实现
 
 
+#### 垃圾回收算法 暂时跳过 
+
+
+#### 3.8 实战：内存分配与回收策略
+
+##### 3.8.1 对象优先在Eden分配
+对象在新生代 Eden 区中分配。当 Eden 区没有足够空间进行分配时，虚拟机将发起一次 Minor GC。
+收集器日志参数：-XX: +PrintGCDetails (发生垃圾收集行为时打印内存回收日志)
+
+
+-verbose:gc -Xms20M -Xmx20M -Xmn10M -XX:+PrintGCDetails -XX:SurvivorRatio=8
+
+##### 3.8.2 大对象直接进入老年代
+-XX:PretenureSizeThreshold=3145728
+指定大于该设置值的对象，直接在老年代分配内存，目的是避免在Eden区及两个Survivor区之间来回复制产生大量的内存复制操作
+
+##### 3.8.3 长期存活的对象将进入老年代
+-XX:MaxTenuringThreshold=15 
+对象年龄阈值 （对象在 Survivor 区中每经历一次 Minor gc 年龄 + 1，当年龄增加到一定程度（默认15）将会被晋升到老年代）
+
+##### 动态对象年龄判定
+HotSpot 虚拟机并不是永远要求对象的年龄必须达到 -XX:MaxTenuringThreshold 才能晋升老年代。
+如果在Survivor空间中相同年龄所有对象大小的总和大于Survivor空间的一半，年龄大于或等于该年龄的对象就可以直接进入老年代，无须等到 -XX:MaxTenuringThreshold 中要求的年龄。
+
+##### 3.8.5 空间分配担保
+在发生Minor GC 之前，虚拟机必须先检查老年代最大可用的连续空间是否大于新生代所有对象总空间，如果这个条件成立，那这一次Minor GC 可以确保是安全的。如果不成立，则虚拟机会先查看 
+-XX:HandlePromotionFailure 参数的设置值是否允许担保失败（Handle Promotion Failure）;如果允许，那会继续检查老年代最大可用的连续空间是否大于历次晋升到老年代对象的平均大小，如果大于，将尝试进行一次Minor GC，尽管这次Minor GC 是有风险的；如果小于，或者 -XX:HandlePromotionFailure设置不允许冒险，那这时就要改为进行一次 Full GC.
+
 
 
 
