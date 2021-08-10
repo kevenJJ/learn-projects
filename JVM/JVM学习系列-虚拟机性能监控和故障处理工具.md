@@ -1,8 +1,11 @@
 ### 第4章 虚拟机性能监控和故障处理工具
 
+
 #### 4.1 概述
 
+
 #### 4.2 基础故障处理工具
+
 
 ##### 4.2.1 jps:虚拟机进程状况工具
 jps （JVM Process Status Tool）
@@ -36,7 +39,7 @@ VMID与LVMID 说明：
   ![](img/-gccause.png)
   * -gcnew 监视新生代垃圾收集状况
   ![](img/-gcnew.png)
-  * -gcnercapacity 监视内容与-gcnew基本相同，输出主要关注使用到的最大、最小空间
+  * -gcnewcapacity 监视内容与-gcnew基本相同，输出主要关注使用到的最大、最小空间
   * -gcold  监视老年代垃圾收集状况
   ![](img/-gcold.png)
   * -gcoldcapacity 监视内容与-gcold内同相同，输出主要关注使用到的最大、最小空间。
@@ -49,6 +52,23 @@ VMID与LVMID 说明：
 * -printcompilation 输出已经被即使编译的方法
 ![](img/-printcompilation.png)
 
+
+##### 4.2.3 jinfo:Java配置信息工具
+jinfo（configuration info for java）的作用是实时查看和调整虚拟机各项参数。
+
+
+##### 4.2.4 jmap:Java内存影像工具
+jmap（Memory Map For Java）命令用于生成堆转储快照（一般称为heapdump或dump）
+jmap [option] vmid
+
+|   选项   | 作用    |
+|   ----   | ---- |
+|   -dump       |   生成Java堆转储快照。格式为 -dump:[live,]format=b,file=<filename>,其中 live 子参数说明是否只 dump 出存活的对象。|
+| -finalizerinfo | 显示在 F-Queue 中等待 Finalizer 线程执行 finalize 方法的对象。只在 linux/Solaris 平台上有效  |
+| -heap | 显示 Java 堆详细信息，如使用哪种回收器、参数配置、分代状况等。只在 Linux/Solaris 平台下有小 |
+| -histo | 显示堆中对象统计信息，包括类、实例数量、合计容量等 |
+| -permstat | 以 ClassLoader 为统计口径显示永久代内存状态   |
+| -F | 当虚拟机进程对 -dump 选项没有响应时，可使用这个选项强制生成dump 快照。
 
 
 
